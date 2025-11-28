@@ -1,0 +1,204 @@
+/* ================================
+   TEMA: Variáveis de cor e sombras
+   ================================ */
+
+/* Light (default) – branco + azuis bem claros */
+:root {
+  /* Plano de fundo geral */
+  --wsn-body-bg: radial-gradient(1400px 900px at 10% -10%, #ffffff, #eff4ff);
+  /* Superfícies/cards/nav */
+  --wsn-surface: #f3f8ff;
+  --wsn-surface-2: #dde0f8;
+  --wsn-border: #d6e5f8;
+  --wsn-shadow: 0 6px 22px rgba(13, 109, 253, 0.12);
+  /* Acentos */
+  --wsn-primary: #0d6efd; /* Bootstrap primary */
+  --wsn-primary-weak: #e8f1ff;
+  --wsn-muted: #6b7a90;
+  /* Área do canvas (bem clara) */
+  --wsn-canvas: #ecf1fd;
+  /* Elementos “chip” e detalhes */
+  --wsn-chip-bg: #eaf2ff;
+  --wsn-chip-fg: #0d47a1;
+  /* Traços finos (divisórias) */
+  --wsn-hair: rgba(13,110,253,.08);
+}
+
+/* Dark – tons de cinza, canvas cinza médio p/ boa leitura */
+[data-bs-theme="dark"] {
+  --wsn-body-bg: radial-gradient(1200px 800px at 10% -10%, #0e1116, #0b0e13);
+  --wsn-surface: #262a30;      /* cards/nav */
+  --wsn-surface-2: #32465e;    /* cabeçalhos */
+  --wsn-border: #222831;
+  --wsn-shadow: 0 10px 26px rgba(0,0,0,.35);
+  --wsn-primary: #7aa2ff;      /* acento mais suave no dark */
+  --wsn-primary-weak: #111a28;
+  --wsn-muted: #9aa4b2;
+  --wsn-canvas: #575f6b;       /* cinza médio para destacar linhas/IDs */
+  --wsn-chip-bg: #1c222b;
+  --wsn-chip-fg: #c9dafc;
+  --wsn-hair: rgba(122,162,255,.12);
+}
+
+/* =========================
+   Reset/ajustes de estrutura
+   ========================= */
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: var(--wsn-body-bg) fixed;
+  color: inherit; /* Bootstrap define as cores de texto base */
+  /* REMOVA o margin do body se ainda existir */
+  margin: 0;
+}
+
+/* Navbar translúcida e com borda suave */
+.navbar {
+  border-bottom: 1px solid var(--wsn-border);
+  backdrop-filter: saturate(140%) blur(8px);
+  background-color: color-mix(in srgb, var(--wsn-surface) 88%, transparent);
+}
+
+.navbar .navbar-brand i {
+  color: var(--wsn-primary);
+}
+
+/* =======================
+   Cards e cabeçalhos
+   ======================= */
+
+.card {
+  border: 1px solid var(--wsn-border);
+  background-color: var(--wsn-surface);
+  border-radius: 14px;
+  box-shadow: var(--wsn-shadow);
+}
+
+.card-header {
+  background: linear-gradient(180deg, var(--wsn-hair), transparent);
+  border-bottom: 1px solid var(--wsn-border);
+}
+
+.card .form-text {
+  color: var(--wsn-muted);
+}
+
+/* Botão “fantasma” (ícone de minimizar nos cards) */
+.btn-ghost{
+  --bs-btn-padding-y:.25rem; --bs-btn-padding-x:.5rem;
+  --bs-btn-border-color:transparent; --bs-btn-bg:transparent;
+  --bs-btn-hover-bg: var(--wsn-primary-weak);
+  --bs-btn-color:inherit;
+}
+
+/* =======================
+   Toolbar / Badges / Chips
+   ======================= */
+
+.toolbar .btn { 
+  min-width: 2.6rem; 
+  border-radius: 12px;
+}
+
+.badge-dot { 
+  width: .75rem; height: .75rem; border-radius: 50%; display: inline-block; 
+}
+.bg-success.badge-dot { background:#22c55e; }
+[data-bs-theme="dark"] .bg-success.badge-dot { background:#37d67a; }
+
+.chip{
+  display:inline-flex; align-items:center; gap:.4rem;
+  background:var(--wsn-chip-bg); color:var(--wsn-chip-fg);
+  padding:.25rem .6rem; border-radius:999px; font-size:.825rem;
+  border:1px solid var(--wsn-border);
+}
+
+/* =======================
+   Canvas (área de simulação)
+   ======================= */
+
+/* O canvas ocupa a largura do container visual (Bootstrap) */
+#canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+  border: 1px solid var(--wsn-border);
+  border-radius: 10px;
+  margin-top: 8px;
+  background-color: var(--wsn-canvas);
+}
+
+/* opcional: borda de foco ao navegar por teclado */
+#canvas:focus {
+  outline: 2px solid var(--wsn-primary);
+  outline-offset: 3px;
+}
+
+/* Container “quadrado” do canvas, se estiver usando .square-canvas com relação 1:1 */
+.square-canvas {
+  position: relative;
+  width: 100%;
+  /* Se quiser forçar quadrado perfeito por CSS puro:
+     padding-top: 100%; 
+     e o canvas como position:absolute 0/0/0/0; 
+     você já define width/height pelo atributo, então deixei sem. */
+}
+
+/* =======================
+   Inputs / Groups / Selects
+   ======================= */
+
+.input-group-text {
+  background-color: var(--wsn-surface-2);
+  border-color: var(--wsn-border);
+}
+
+.form-control, .form-select {
+  background-color: var(--wsn-surface);
+  border-color: var(--wsn-border);
+  color: inherit;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--wsn-primary);
+  box-shadow: 0 0 0 .2rem color-mix(in srgb, var(--wsn-primary) 25%, transparent);
+}
+
+/* =======================
+   Divisórias e detalhes finos
+   ======================= */
+
+hr {
+  border-color: var(--wsn-border);
+  opacity: 1;
+}
+
+/* =======================
+   Scrollbar (agradável no dark)
+   ======================= */
+
+@supports selector(::-webkit-scrollbar) {
+  *::-webkit-scrollbar { width: 10px; height: 10px; }
+  *::-webkit-scrollbar-track { background: transparent; }
+  *::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--wsn-primary) 20%, #9aa5b1);
+    border-radius: 8px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  [data-bs-theme="dark"] *::-webkit-scrollbar-thumb {
+    background: #3b4250;
+  }
+}
+
+/* =======================
+   Utilitários próprios
+   ======================= */
+
+.text-muted-strong { color: var(--wsn-muted); }
+.border-hair { border-color: var(--wsn-border) !important; }
+.bg-surface-2 { background-color: var(--wsn-surface-2) !important; }

@@ -1,0 +1,437 @@
+{% load static %}
+<!doctype html>
+<html lang="pt-br" data-bs-theme="auto">
+<head>
+  <meta charset="utf-8" />
+  <title>Visual Grubix 2.0</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Bootstrap core + Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <!-- Seu CSS opcional -->
+  <link rel="stylesheet" href="{% static 'simulation/css/style.css' %}">
+</head>
+<body>
+
+  <!-- Barra de navegação -->
+  <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top" role="navigation" aria-label="Barra principal">
+    <div class="container">
+      <a class="navbar-brand fw-semibold d-flex align-items-center gap-2" href="#">
+        <i class="bi bi-diagram-3-fill"></i> Visual Grubix 2.0
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"
+              aria-controls="navMain" aria-expanded="false" aria-label="Alternar navegação">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div id="navMain" class="collapse navbar-collapse">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <span class="nav-link active d-flex align-items-center gap-2" aria-current="page">
+              <i class="bi bi-broadcast-pin"></i>
+              Visualizador de Simulação Computacional em Redes de Sensores Sem Fio
+            </span>
+          </li>
+        </ul>
+        <div class="d-flex align-items-center gap-2">
+          <a class="navbar-brand fw-semibold d-flex align-items-center gap-2" href="https://github.com/jesimar/VisualGrubix2">
+            <i class="bi bi-github"></i>
+          </a>
+          <span class="chip"><i class="bi bi-cloud-arrow-up"></i> Versão: 2.0.0</span>
+          <button class="btn btn-outline-secondary btn-sm" type="button" id="btn-theme" aria-label="Alternar tema" data-bs-toggle="tooltip" title="Tema claro/escuro">
+            <i class="bi bi-sun-fill" aria-hidden="true"></i>Tema
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Conteúdo principal -->
+  <main class="container my-4">
+
+    <!-- Card: Upload e Controles -->
+    <section class="card shadow-sm mb-4" aria-labelledby="sec-controles-title">
+      <div class="card-header d-flex align-items-center justify-content-between">
+        <h2 id="sec-controles-title" class="h5 mb-0 d-flex align-items-center gap-2">
+          <i class="bi bi-folder2-open"></i> Arquivo & Controles
+        </h2>
+        <span class="text-body-secondary small d-flex align-items-center gap-2">
+          <i class="bi bi-keyboard"></i>
+          Use: <kbd>Espaço</kbd> (Iniciar) • <kbd>S</kbd> (Pausar) • <kbd>←</kbd>/<kbd>→</kbd> (Step)
+        </span>
+      </div>
+      <div class="card-body">
+
+        <!-- Upload -->
+        <form id="form-upload" class="row gy-3 align-items-end" aria-describedby="upload-help">
+          {% csrf_token %}
+          <div class="col-12 col-md-6">
+            <label for="xmlFile" class="form-label d-flex align-items-center gap-2">
+              <i class="bi bi-filetype-xml"></i> Arquivo de simulação (XML)
+            </label>
+            <div class="input-group">
+              <span class="input-group-text" id="xml-addon"><i class="bi bi-file-earmark-code"></i></span>
+              <input id="xmlFile" type="file" name="file" accept=".xml" required
+                      class="form-control" aria-describedby="xml-addon upload-help">
+              <button type="submit" class="btn btn-primary" aria-label="Carregar arquivo XML">
+                <i class="bi bi-upload" aria-hidden="true"></i> Carregar
+              </button>
+            </div>
+            <div id="upload-help" class="form-text">
+              Selecione um XML compatível com o simulador.
+            </div>
+          </div>
+
+          <div class="col-12 col-md-3">
+            <label for="speed" class="form-label d-flex align-items-center gap-2">
+              <i class="bi bi-speedometer2"></i> Velocidade
+            </label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-rocket-takeoff"></i></span>
+              <input id="speed" type="number" step="0.1" min="0.1" value="1.0"
+                      class="form-control" inputmode="decimal" aria-label="Velocidade de simulação">
+              <button class="btn btn-outline-secondary" data-act="speed" type="button" aria-label="Aplicar velocidade" data-bs-toggle="tooltip" title="Aplicar velocidade">
+                <i class="bi bi-check2-circle" aria-hidden="true"></i> Aplicar
+              </button>
+            </div>
+            <div id="velocidade-help" class="form-text">
+              Quanto menor o valor, mais rápido.
+            </div>
+          </div>
+
+          <div class="col-12 col-md-3">
+            <label for="speed" class="form-label d-flex align-items-center gap-2">
+              <i class="bi bi-x-octagon-fill"></i> Fechar Simulação
+            </label>
+            <button type="button" class="btn btn-danger" id="btn-close-sim" title="Fechar simulação">
+              <i class="bi bi-x-octagon-fill"></i>
+              Fechar
+            </button>
+            <div id="fechar-help" class="form-text">
+              Fecha a simulação atual.
+            </div>
+          </div>
+        </form>
+
+        <hr class="my-4">        
+        <!-- Toolbar de simulação -->
+        <div class="toolbar d-flex flex-wrap gap-2" role="toolbar" aria-label="Controles da simulação">
+          <div class="btn-group" role="group" aria-label="Execução">
+            <button class="btn btn-success" data-act="play" type="button" aria-label="Iniciar" data-bs-toggle="tooltip" title="Iniciar simulação (Espaço)">
+              <i class="bi bi-play-fill" aria-hidden="true"></i>
+            </button>
+            <button class="btn btn-warning" data-act="pause" type="button" aria-label="Pausar" data-bs-toggle="tooltip" title="Pausar simulação (S)">
+              <i class="bi bi-pause-fill" aria-hidden="true"></i>
+            </button>
+            <button class="btn btn-secondary" id="btn-step-b" data-act="step_b" type="button" aria-label="Voltar um passo" data-bs-toggle="tooltip" title="Voltar um passo (←)">
+              <i class="bi bi-arrow-left-short" aria-hidden="true"></i>
+            </button>
+            <button class="btn btn-dark" id="btn-step-f" data-act="step_f" type="button" aria-label="Avançar um passo" data-bs-toggle="tooltip" title="Avançar um passo (→)">
+              <i class="bi bi-arrow-right-short" aria-hidden="true"></i>
+            </button>
+          </div>
+
+          <div class="vr mx-2"></div>
+
+          <div class="btn-group" role="group" aria-label="Zoom e enquadramento">
+            <button type="button" id="btn-fit" class="btn btn-outline-primary" aria-label="Ajustar à tela" data-bs-toggle="tooltip" title="Ajustar à tela">
+              <i class="bi bi-aspect-ratio" aria-hidden="true"></i>
+            </button>
+            <button type="button" id="btn-zoomin" class="btn btn-outline-primary" aria-label="Aproximar" data-bs-toggle="tooltip" title="Aproximar à tela">
+              <i class="bi bi-zoom-in" aria-hidden="true"></i>
+            </button>
+            <button type="button" id="btn-zoomout" class="btn btn-outline-primary" aria-label="Afastar" data-bs-toggle="tooltip" title="Afastar à tela">
+              <i class="bi bi-zoom-out" aria-hidden="true"></i>
+            </button>
+          </div>
+
+          <div class="vr mx-2"></div>
+
+          <!-- Grupo: Nós / Rótulos / Export -->
+          <div class="btn-group" role="group" aria-label="Nós e rótulos">
+            <button type="button" id="btn-node-inc" class="btn btn-outline-secondary" aria-label="Aumentar tamanho do nó" data-bs-toggle="tooltip" title="Aumentar tamanho do nó">
+              <i class="bi bi-plus-circle" aria-hidden="true"></i>
+            </button>
+            <button type="button" id="btn-node-dec" class="btn btn-outline-secondary" aria-label="Diminuir tamanho do nó" data-bs-toggle="tooltip" title="Diminuir tamanho do nó">
+              <i class="bi bi-dash-circle" aria-hidden="true"></i>
+            </button>
+            <button type="button" id="btn-node-reset" class="btn btn-outline-secondary" aria-label="Tamanho padrão do nó" data-bs-toggle="tooltip" title="Tamanho padrão do nó">
+              <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i>
+            </button>
+          </div>
+
+          <div class="vr mx-2"></div>
+
+          <div class="btn-group" role="group" aria-label="Animação de pacote">
+            <button type="button" id="btn-anim-packet" class="btn btn-outline-secondary" aria-pressed="false" title="Animação em forma de pacote">
+              <i class="bi bi-box-seam"></i>
+            </button>
+            <button type="button" id="btn-anim-wave" class="btn btn-outline-primary active" aria-pressed="true" title="Animação em forma de onda">
+              <i class="bi bi-record-circle"></i>
+            </button>
+          </div>
+
+          <div class="vr mx-2"></div>
+
+          <div class="d-flex align-items-center gap-4">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="chk-ids">
+              <label class="form-check-label d-flex align-items-center gap-2" for="chk-ids">
+                <i class="bi bi-tag"></i> IDs
+              </label>
+            </div>
+
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="chk-graph">
+              <label class="form-check-label d-flex align-items-center gap-2" for="chk-graph">
+                <i class="bi bi-diagram-3"></i> Grafo
+              </label>
+            </div>
+
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="chk-sprites">
+              <label class="form-check-label d-flex align-items-center gap-2" for="chk-sprites">
+                <i class="bi bi-images"></i> Imagens
+              </label>
+            </div>
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="chk-trails">
+              <label class="form-check-label" for="chk-trails">
+                <i class="bi bi-bezier2"></i> Trilhas
+              </label>
+            </div>
+          </div>          
+
+          <div class="vr mx-2"></div>
+          <div class="input-group" style="max-width: 350px;">
+            <label class="input-group-text" for="sel-mapping">
+              <i class="bi bi-palette2"></i> Mapeamento
+            </label>
+            <select id="sel-mapping" class="form-select"></select>
+          </div>
+
+          <div class="vr mx-2"></div>
+          <button type="button" id="btn-save-png" class="btn btn-outline-success" aria-label="Salvar canvas em PNG" data-bs-toggle="tooltip" title="Salvar canvas em PNG">
+              <i class="bi bi-download" aria-hidden="true"></i> PNG
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Card: Canvas -->
+    <!-- LINHA: Canvas (esq) + Painéis (dir) -->
+    <section class="row g-4 align-items-stretch">
+      <!-- COL ESQUERDA: Canvas quadrado -->
+      <div class="col-12 col-lg-8">
+        <div class="card shadow-sm h-100 w-100" aria-labelledby="sec-canvas-title">
+          <div class="card-header d-flex align-items-center justify-content-between">
+            <h2 id="sec-canvas-title" class="h5 mb-0 d-flex align-items-center gap-2">
+              <i class="bi bi-grid-3x3-gap"></i> Área da Simulação
+            </h2>
+            <div class="ms-auto d-flex align-items-center gap-3" aria-live="polite" aria-atomic="true">
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge-dot bg-success" role="img" aria-label="Conectado"></span>
+                <span id="info-time" class="text-body-secondary">
+                  <i class="bi bi-clock-history me-1"></i>Tempo: 0.00
+                </span>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-collection-play" aria-hidden="true"></i>
+                <span id="info-idx" class="text-body-secondary">Evento: 0/0</span>
+              </div>
+              <div class="d-none d-md-flex align-items-center gap-2">
+                <i class="bi bi-mouse3"></i>
+                <small id="info-idx2" class="text-body-secondary">
+                  Scroll = zoom • Arraste = mover
+                </small>
+              </div>
+            </div>
+            <button class="btn btn-ghost btn-sm" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#collapse-sim"
+                    aria-expanded="true" aria-controls="collapse-sim"
+                    title="Minimizar/Expandir">
+              <i class="bi bi-chevron-up"></i>
+            </button>
+          </div>
+
+          <div id="collapse-sim" class="card-body collapse show">
+            <!-- Canvas QUADRADO -->
+            <div class="square-canvas">
+              <canvas id="canvas" width="600" height="600"
+                      role="img" aria-label="Área de desenho da simulação"></canvas>
+            </div>
+            <div id="legend" class="mt-2 small"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COL DIREITA: painéis empilhados -->
+      <div class="col-12 col-lg-4 d-flex">
+        <!-- Nó selecionado -->
+        <div class="card shadow-sm h-100 w-100" aria-labelledby="sec-node-title">
+          <div class="card-header d-flex align-items-center justify-content-between">
+            <h2 id="sec-node-title" class="h6 mb-0 d-flex align-items-center gap-2">
+              <i class="bi bi-person-bounding-box"></i> Nó selecionado
+            </h2>
+            <div class="d-flex align-items-center gap-2">
+              <button type="button" id="btn-clear-selection" class="btn btn-outline-secondary btn-sm" aria-label="Limpar seleção">
+                <i class="bi bi-eraser"></i> Limpar
+              </button>
+              <button class="btn btn-ghost btn-sm" type="button"
+                      data-bs-toggle="collapse" data-bs-target="#collapse-node"
+                      aria-expanded="true" aria-controls="collapse-node"
+                      title="Minimizar/Expandir">
+                <i class="bi bi-chevron-up"></i>
+              </button>
+            </div>
+          </div>
+          <div id="collapse-node" class="collapse show">
+            <div class="card-body">
+              <dl class="row mb-0" aria-live="polite" aria-atomic="true">
+                <dt class="col-sm-4 col-lg-4">ID</dt>
+                <dd class="col-sm-8 col-lg-8" id="sel-id">—</dd>
+                <dt class="col-sm-4 col-lg-4">Tipo</dt>
+                <dd class="col-sm-8 col-lg-8" id="sel-type">—</dd>
+                <dt class="col-sm-4 col-lg-4">Posição</dt>
+                <dd class="col-sm-8 col-lg-8" id="sel-pos">—</dd>
+                <dt class="col-sm-4 col-lg-4">Raio</dt>
+                <dd class="col-sm-8 col-lg-8" id="sel-radius">—</dd>
+                <dt class="col-sm-4 col-lg-4">Nº Vizinhos</dt>
+                <dd class="col-sm-8 col-lg-8" id="sel-num-neigh">—</dd>
+                <dt class="col-sm-4 col-lg-4">Vizinhos</dt>
+                <dd class="col-sm-8 col-lg-8" id="sel-neigh">—</dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Card: Informações da Simulação -->
+    <section class="card shadow-sm mb-4" aria-labelledby="sec-info-title">
+      <div class="card-header d-flex align-items-center justify-content-between">
+        <h2 id="sec-info-title" class="h5 mb-0 d-flex align-items-center gap-2">
+          <i class="bi bi-info-circle"></i> Informações da Simulação
+        </h2>
+        <button class="btn btn-ghost btn-sm" type="button"
+                data-bs-toggle="collapse" data-bs-target="#collapse-info"
+                aria-expanded="true" aria-controls="collapse-info"
+                title="Minimizar/Expandir">
+          <i class="bi bi-chevron-up"></i>
+        </button>
+      </div>
+      <div id="collapse-info" class="collapse show">
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-3">Descrição</dt>
+            <dd class="col-sm-9" id="meta-desc">—</dd>
+
+            <dt class="col-sm-3">Campo (Largura × Altura)</dt>
+            <dd class="col-sm-9"><span id="meta-size">—</span></dd>
+
+            <dt class="col-sm-3">Quantidade de Nós</dt>
+            <dd class="col-sm-9"><span id="meta-nodes">—</span></dd>
+
+            <dt class="col-sm-3">Densidade (nós/unid²)</dt>
+            <dd class="col-sm-9"><span id="meta-density">—</span></dd>
+
+            <dt class="col-sm-3">Raio de comunicação</dt>
+            <dd class="col-sm-9"><span id="meta-radius">—</span></dd>
+
+            <dt class="col-sm-3">Tempo sim. máx.</dt>
+            <dd class="col-sm-9"><span id="meta-simtime">—</span></dd>
+
+            <dt class="col-sm-3">Eventos</dt>
+            <dd class="col-sm-9"><span id="meta-events">—</span></dd>
+
+            <dt class="col-sm-3">Grau médio</dt>
+            <dd class="col-sm-9"><span id="stat-avgdeg">—</span></dd>
+
+            <dt class="col-sm-3">Grau máx.</dt>
+            <dd class="col-sm-9"><span id="stat-maxdeg">—</span></dd>
+
+            <dt class="col-sm-3">Componentes</dt>
+            <dd class="col-sm-9"><span id="stat-comps">—</span></dd>
+
+            <dt class="col-sm-3">Pacotes (taxa)</dt>
+            <dd class="col-sm-9">
+              <span id="stat-pkts">—</span>
+              <small class="text-body-secondary">(pkt/s)</small>
+            </dd>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Rodapé -->
+  <footer class="border-top py-4 mt-5">
+    <div class="container d-flex justify-content-between align-items-center">
+      <span class="text-body-secondary small d-flex align-items-center gap-2">
+        <i class="bi bi-c-circle"></i>
+        Jesimar da Silva Arantes - Grupo de Redes Ubíquas - UFLA
+      </span>
+      <a class="link-secondary small d-flex align-items-center gap-1" href="#" aria-label="Voltar ao topo">
+        <i class="bi bi-arrow-up-circle"></i> Voltar ao topo
+      </a>
+    </div>
+  </footer>
+
+  <!-- Bootstrap bundle (JS + Popper) & inicialização de tooltips -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+          crossorigin="anonymous"></script>
+
+  <!-- Atalhos de teclado e tooltips -->
+  <script>
+    // Tooltips
+    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => new bootstrap.Tooltip(el));
+
+    // Alternar ícone do botão "minimizar" (chevron up/down)
+    document.querySelectorAll('[data-bs-target="#collapse-node"],[data-bs-target="#collapse-info"]').forEach(btn=>{
+      const icon = btn.querySelector('i');
+      const targetSel = btn.getAttribute('data-bs-target');
+      const target = document.querySelector(targetSel);
+      if (!icon || !target) return;
+      target.addEventListener('shown.bs.collapse', ()=>{ icon.classList.remove('bi-chevron-down'); icon.classList.add('bi-chevron-up'); });
+      target.addEventListener('hidden.bs.collapse', ()=>{ icon.classList.remove('bi-chevron-up');   icon.classList.add('bi-chevron-down'); });
+    });
+
+    // Atalhos: espaço = play, S = pause, setas = steps
+    window.addEventListener('keydown', (e) => {
+      const send = (act) => fetch(`/api/${act}`, {method:'POST', headers:{'X-CSRFToken': getCSRF()}});
+      if (e.target.closest('input, textarea, select')) return;
+      if (e.code === 'Space') { e.preventDefault(); send('play').catch(()=>{}); }
+      if (e.code === 'KeyS')  { e.preventDefault(); send('pause').catch(()=>{}); }
+      if (e.code === 'ArrowRight') { e.preventDefault(); send('step_f').catch(()=>{}); }
+      if (e.code === 'ArrowLeft')  { e.preventDefault(); send('step_b').catch(()=>{}); }
+    });
+
+    // Alternar tema claro/escuro
+    const themeBtn = document.getElementById('btn-theme');
+    if (themeBtn) {
+      themeBtn.addEventListener('click', () => {
+        const html = document.documentElement;
+        const current = html.getAttribute('data-bs-theme') || 'auto';
+        const next = current === 'dark' ? 'light' : (current === 'light' ? 'dark' : 'dark');
+        html.setAttribute('data-bs-theme', next);
+      });
+    }
+
+    // Helper CSRF para atalhos
+    function getCSRF() {
+      const name = 'csrftoken';
+      const cookie = document.cookie.split(';').map(v => v.trim());
+      for (const c of cookie) if (c.startsWith(name + '=')) return c.substring(name.length + 1);
+      return null;
+    }
+  </script>
+  <!-- Seu JS -->
+  <script src="{% static 'simulation/js/simulation.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<simulatorlog>
+	<configuration>
+		<description write="Esta simulação tem por objetivo compreender o protocolo PAX-MAC." />
+		<field>
+			<x>100.0</x>
+			<y>100.0</y>
+		</field>
+		<simulationtime stepspersecond="100" base="steps">100000</simulationtime>
+		<physicalmodel>br.ufla.dcc.grubix.simulator.physical.UnitDisc</physicalmodel>
+		<movementmanager>br.ufla.dcc.mu.movement.ComposedMovement</movementmanager>
+		<communicationradius>10.0</communicationradius>
+		<nodes>
+			<count>10</count>
+			<layers>
+				<physical>br.ufla.dcc.grubix.simulator.node.user.PHY_802_11bg</physical>
+				<mac>br.ufla.dcc.grubix.simulator.node.user.MAC_IEEE802_11bg_DCF</mac>
+				<loglink>br.ufla.dcc.grubix.simulator.node.user.LogLinkDebug</loglink>
+				<network>br.ufla.dcc.mu.node.OptimalSourceRouting</network>
+				<application>br.ufla.dcc.mu.node.Intruder</application>
+			</layers>
+		</nodes>
+		<positions>
+			<position>
+				<id>1</id>
+				<x>10.0</x>
+				<y>50.0</y>
+				<info nodetype="REGULAR" />
+				<ismobile>false</ismobile>
+			</position>
+			<position>
+				<id>2</id>
+				<x>20.0</x>
+				<y>50.0</y>
+				<info nodetype="REGULAR" />
+				<ismobile>false</ismobile>
+			</position>
+			<position>
+				<id>3</id>
+				<x>30.0</x>
+				<y>50.0</y>
+				<info nodetype="REGULAR" />
+				<ismobile>false</ismobile>
+			</position>
+			<position>
+				<id>4</id>
+				<x>40.0</x>
+				<y>50.0</y>
+				<info nodetype="REGULAR" />
+				<ismobile>false</ismobile>
+			</position>
+			<position>
+				<id>5</id>
+				<x>50.0</x>
+				<y>50.0</y>
+				<info nodetype="REGULAR" />
+				<ismobile>false</ismobile>
+			</position>
+			<position>
+				<id>6</id>
+				<x>60.0</x>
+				<y>50.0</y>
+				<info nodetype="REGULAR" />
+				<ismobile>false</ismobile>
+			</position>
+			<position>
+				<id>7</id>
+				<x>70.0</x>
+				<y>50.0</y>
+				<info nodetype="REGULAR" />
+				<ismobile>false</ismobile>
+			</position>
+			<position>
+				<id>8</id>
+				<x>80.0</x>
+				<y>50.0</y>
+				<info nodetype="REGULAR" />
+				<ismobile>false</ismobile>
+			</position>
+			<position>
+				<id>9</id>
+				<x>90.0</x>
+				<y>50.0</y>
+				<info nodetype="REGULAR" />
+				<ismobile>false</ismobile>
+			</position>
+			<position>
+				<id>10</id>
+				<x>90.0</x>
+				<y>60.0</y>
+				<info nodetype="REGULAR" />
+				<ismobile>false</ismobile>
+			</position>
+		</positions>
+	</configuration>
+	<simulationrun>
+		<nodestate id="1" name="TypeOfNode" type="int" value="2" />
+		<nodestate id="1" name="NodeId" type="int" value="1" />
+		<nodestate id="2" name="TypeOfNode" type="int" value="2" />
+		<nodestate id="2" name="NodeId" type="int" value="2" />
+		<nodestate id="3" name="TypeOfNode" type="int" value="2" />
+		<nodestate id="3" name="NodeId" type="int" value="3" />
+		<nodestate id="4" name="TypeOfNode" type="int" value="2" />
+		<nodestate id="4" name="NodeId" type="int" value="4" />
+		<nodestate id="5" name="TypeOfNode" type="int" value="2" />
+		<nodestate id="5" name="NodeId" type="int" value="5" />
+		<nodestate id="6" name="TypeOfNode" type="int" value="2" />
+		<nodestate id="6" name="NodeId" type="int" value="6" />
+		<nodestate id="7" name="TypeOfNode" type="int" value="2" />
+		<nodestate id="7" name="NodeId" type="int" value="7" />
+		<nodestate id="8" name="TypeOfNode" type="int" value="2" />
+		<nodestate id="8" name="NodeId" type="int" value="8" />
+		<nodestate id="9" name="TypeOfNode" type="int" value="2" />
+		<nodestate id="9" name="NodeId" type="int" value="9" />
+		<nodestate id="10" name="TypeOfNode" type="int" value="2" />
+		<nodestate id="10" name="NodeId" type="int" value="10" />
+		
+		<nodestate id="1" name="StateWaitSleep" type="int" value="100" />
+		<nodestate id="2" name="StateWaitSleep" type="int" value="50" />
+		<nodestate id="3" name="StateWaitSleep" type="int" value="50" />
+		<nodestate id="4" name="StateWaitSleep" type="int" value="50" />
+		<nodestate id="5" name="StateWaitSleep" type="int" value="50" />
+		<nodestate id="6" name="StateWaitSleep" type="int" value="50" />
+		<nodestate id="7" name="StateWaitSleep" type="int" value="50" />
+		<nodestate id="8" name="StateWaitSleep" type="int" value="50" />
+		<nodestate id="9" name="StateWaitSleep" type="int" value="50" />
+		<nodestate id="10" name="StateWaitSleep" type="int" value="50" />
+		<enqueue>
+			<time>1.0</time>
+			<type>br.ufla.dcc.grubix.simulator.event.PhysicalPacket</type>
+			<id>1000</id>
+			<receiverid>-1</receiverid>
+			<tolayer>
+				<senderid>1</senderid>
+				<senderlayer>Physical</senderlayer>
+				<internreceiverid>2</internreceiverid>
+				<internreceiverlayer>Physical</internreceiverlayer>
+				<enclosedeventid>6654</enclosedeventid>
+			</tolayer>
+		</enqueue>
+		
+		<nodestate id="1" name="StateWaitSleep" type="int" value="50" />
+		<nodestate id="2" name="StateWaitSleep" type="int" value="100" />
+		
+		<enqueue>
+			<time>2.0</time>
+			<type>br.ufla.dcc.grubix.simulator.event.PhysicalPacket</type>
+			<id>2000</id>
+			<receiverid>-1</receiverid>
+			<tolayer>
+				<senderid>2</senderid>
+				<senderlayer>Physical</senderlayer>
+				<internreceiverid>3</internreceiverid>
+				<internreceiverlayer>Physical</internreceiverlayer>
+				<enclosedeventid>6654</enclosedeventid>
+			</tolayer>
+		</enqueue>
+		
+		<nodestate id="2" name="StateWaitSleep" type="int" value="50" />
+		<nodestate id="3" name="StateWaitSleep" type="int" value="100" />
+		
+		<enqueue>
+			<time>3.0</time>
+			<type>br.ufla.dcc.grubix.simulator.event.PhysicalPacket</type>
+			<id>3000</id>
+			<receiverid>-1</receiverid>
+			<tolayer>
+				<senderid>3</senderid>
+				<senderlayer>Physical</senderlayer>
+				<internreceiverid>4</internreceiverid>
+				<internreceiverlayer>Physical</internreceiverlayer>
+				<enclosedeventid>6654</enclosedeventid>
+			</tolayer>
+		</enqueue>
+		
+		<nodestate id="3" name="StateWaitSleep" type="int" value="50" />
+		<nodestate id="4" name="StateWaitSleep" type="int" value="100" />
+		
+		<enqueue>
+			<time>4.0</time>
+			<type>br.ufla.dcc.grubix.simulator.event.PhysicalPacket</type>
+			<id>4000</id>
+			<receiverid>-1</receiverid>
+			<tolayer>
+				<senderid>4</senderid>
+				<senderlayer>Physical</senderlayer>
+				<internreceiverid>5</internreceiverid>
+				<internreceiverlayer>Physical</internreceiverlayer>
+				<enclosedeventid>211135</enclosedeventid>
+			</tolayer>
+		</enqueue>
+		
+		<nodestate id="4" name="StateWaitSleep" type="int" value="50" />
+		<nodestate id="5" name="StateWaitSleep" type="int" value="100" />
+		
+		<enqueue>
+			<time>5.0</time>
+			<type>br.ufla.dcc.grubix.simulator.event.PhysicalPacket</type>
+			<id>5000</id>
+			<receiverid>-1</receiverid>
+			<tolayer>
+				<senderid>5</senderid>
+				<senderlayer>Physical</senderlayer>
+				<internreceiverid>6</internreceiverid>
+				<internreceiverlayer>Physical</internreceiverlayer>
+				<enclosedeventid>211135</enclosedeventid>
+			</tolayer>
+		</enqueue>
+		
+		<nodestate id="5" name="StateWaitSleep" type="int" value="50" />
+		<nodestate id="6" name="StateWaitSleep" type="int" value="100" />
+		
+		<enqueue>
+			<time>6.0</time>
+			<type>br.ufla.dcc.grubix.simulator.event.PhysicalPacket</type>
+			<id>6000</id>
+			<receiverid>-1</receiverid>
+			<tolayer>
+				<senderid>6</senderid>
+				<senderlayer>Physical</senderlayer>
+				<internreceiverid>7</internreceiverid>
+				<internreceiverlayer>Physical</internreceiverlayer>
+				<enclosedeventid>211135</enclosedeventid>
+			</tolayer>
+		</enqueue>
+		<enqueue>
+			<time>7.0</time>
+			<type>br.ufla.dcc.grubix.simulator.event.PhysicalPacket</type>
+			<id>7000</id>
+			<receiverid>-1</receiverid>
+			<tolayer>
+				<senderid>7</senderid>
+				<senderlayer>Physical</senderlayer>
+				<internreceiverid>8</internreceiverid>
+				<internreceiverlayer>Physical</internreceiverlayer>
+				<enclosedeventid>211135</enclosedeventid>
+			</tolayer>
+		</enqueue>
+		<enqueue>
+			<time>8.0</time>
+			<type>br.ufla.dcc.grubix.simulator.event.PhysicalPacket</type>
+			<id>8000</id>
+			<receiverid>-1</receiverid>
+			<tolayer>
+				<senderid>8</senderid>
+				<senderlayer>Physical</senderlayer>
+				<internreceiverid>9</internreceiverid>
+				<internreceiverlayer>Physical</internreceiverlayer>
+				<enclosedeventid>211135</enclosedeventid>
+			</tolayer>
+		</enqueue>
+		<enqueue>
+			<time>9.0</time>
+			<type>br.ufla.dcc.grubix.simulator.event.PhysicalPacket</type>
+			<id>9000</id>
+			<receiverid>-1</receiverid>
+			<tolayer>
+				<senderid>9</senderid>
+				<senderlayer>Physical</senderlayer>
+				<internreceiverid>10</internreceiverid>
+				<internreceiverlayer>Physical</internreceiverlayer>
+				<enclosedeventid>211135</enclosedeventid>
+			</tolayer>
+		</enqueue>
+	</simulationrun>
+</simulatorlog>
